@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 
 from heliograph.registry import ComponentRegistry
 from heliograph.renderer import EmailRenderer
-from heliograph.sender import EmailSender, SMTPConfig
+from heliograph.sender import make_sender
 
 DEFAULT_CONFIG = Path(__file__).resolve().parents[2] / "config.yaml"
 
@@ -57,9 +57,10 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     recipients = config.get("email", {}).get("to") or [os.environ["EMAIL_TO"]]
-    sender = EmailSender(SMTPConfig.from_env())
+    sender = make_sender()
     sender.send(recipients, subject, html, text)
-    print(f"Sent '{subject}' to {recipients}")
+    provider = os.environ.get("EMAIL_PROVIDER", "mailgun")
+    print(f"Sent '{subject}' to {recipients} via {provider}")
     return 0
 
 

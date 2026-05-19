@@ -39,3 +39,40 @@ def test_safe_render_swallows_errors():
     result = Boom().safe_render()
     assert result is not None
     assert "kaboom" in result.text
+
+
+def test_skills_payload_parser():
+    """The skills.sh page embeds a Next.js Flight payload — make sure we can pull it out."""
+    import json
+    from heliograph.components.skill_trending import parse_skills_html
+
+    # Build the embedded payload the way Next.js Flight actually does:
+    # an array of dicts dumped to JSON, then the whole HTML string has every
+    # `"` escaped to `\"`. We simulate that with .replace('"', '\\"').
+    skills_obj = [
+        {"source": "vercel-labs/skills", "skillId": "find-skills",
+         "name": "find-skills", "installs": 19256, "isOfficial": True},
+        {"source": "degausai/wonda", "skillId": "wonda-cli",
+         "name": "wonda-cli", "installs": 9000},
+    ]
+    embedded = json.dumps(skills_obj).replace('"', '\\"')
+    fake_html = f'noise before \\"initialSkills\\":{embedded},\\"foo\\":1 noise after'
+
+    skills = parse_skills_html(fake_html)
+    assert len(skills) == 2
+    assert skills[0]["name"] == "find-skills"
+    assert skills[0]["installs"] == 19256
+    assert skills[1]["source"] == "degausai/wonda"
+
+
+def test_skills_payload_parser_missing():
+    from heliograph.components.skill_trending import parse_skills_html
+    assert parse_skills_html("nothing useful here") == []
+
+
+def test_make_sender_unknown_provider(monkeypatch):
+    from heliograph.sender import make_sender
+    monkeypatch.setenv("EMAIL_PROVIDER", "carrier-pigeon")
+    import pytest
+    with pytest.raises(ValueError):
+        make_sender()

@@ -1,6 +1,9 @@
 # Heliograph configuration
-# Each entry under `components` is plugged into the daily email in the order
-# they declare (lower `order` = closer to the top).
+# Each entry under `components` is plugged into the daily email in order of
+# the component's `order` field (lower = closer to the top).
+#
+# To turn a component off, set `enabled: false`. To add a new one, drop a
+# new file under src/heliograph/components/ and reference it here.
 
 email:
   subject: "Heliograph · {date}"
@@ -13,6 +16,36 @@ components:
     class: DailyQuoteComponent
     enabled: true
     config: {}
+
+  - name: market_fear
+    module: heliograph.components.market_fear
+    class: MarketFearComponent
+    enabled: true
+    config: {}
+
+  - name: github_trending
+    module: heliograph.components.github_trending
+    class: GitHubTrendingComponent
+    enabled: true
+    config:
+      days_window: 7   # repos created in the last N days
+      limit: 5
+      # language: python   # uncomment to filter
+
+  - name: skill_trending
+    module: heliograph.components.skill_trending
+    class: SkillTrendingComponent
+    enabled: true
+    config:
+      limit: 5
+
+  - name: arxiv_trending
+    module: heliograph.components.arxiv_trending
+    class: ArxivTrendingComponent
+    enabled: true
+    config:
+      categories: [cs.AI, cs.LG]
+      limit: 5
 
   - name: system_status
     module: heliograph.components.system_status

@@ -9,9 +9,25 @@ dist/
 venv/
 env/
 
-# Secrets
+# Secrets — never commit these
 .env
-.env.local
+.env.*
+!.env.example
+secrets/
+*.secret
+*.secrets
+*secret*
+*credentials*
+*.pem
+*.key
+*.crt
+*.p12
+*api_key*
+*api-key*
+*apikey*
+*mailgun*key*
+*token*.txt
+.netrc
 
 # Editor / OS
 .vscode/
