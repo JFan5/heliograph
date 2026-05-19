@@ -76,3 +76,35 @@ def test_make_sender_unknown_provider(monkeypatch):
     import pytest
     with pytest.raises(ValueError):
         make_sender()
+
+
+def test_translate_arxiv_batch_parses_claude_output(monkeypatch):
+    """Mock the claude CLI call and verify we parse a JSON response correctly."""
+    from heliograph import summarizer
+
+    fake_response = (
+        "```json\n"
+        '[{"title_zh":"中文标题1","summary_zh":"摘要1"},'
+        '{"title_zh":"中文标题2","summary_zh":"摘要2"}]\n'
+        "```"
+    )
+    monkeypatch.setattr(summarizer, "run_claude", lambda prompt, timeout=120: fake_response)
+
+    out = summarizer.translate_arxiv_batch([
+        {"title": "Foo", "summary": "Bar"},
+        {"title": "Baz", "summary": "Qux"},
+    ])
+    assert out[0]["title_zh"] == "中文标题1"
+    assert out[1]["summary_zh"] == "摘要2"
+
+
+def test_translate_arxiv_batch_falls_back_on_garbage(monkeypatch):
+    from heliograph import summarizer
+    monkeypatch.setattr(summarizer, "run_claude", lambda prompt, timeout=120: "not json at all")
+    out = summarizer.translate_arxiv_batch([{"title": "x", "summary": "y"}])
+    assert out == [{}]
+
+
+def test_translate_arxiv_batch_empty_input():
+    from heliograph.summarizer import translate_arxiv_batch
+    assert translate_arxiv_batch([]) == []

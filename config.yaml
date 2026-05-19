@@ -62,6 +62,7 @@ components:
     config:
       categories: [cs.AI, cs.LG]
       limit: 5
+      translate_to_zh: true   # uses `claude -p` to translate + summarize in Chinese
 
   - name: system_status
     module: heliograph.components.system_status
