@@ -7,7 +7,7 @@ name = "heliograph"
 version = "0.1.0"
 description = "A modular daily-email dispatcher — your own signal at sunrise."
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.8"
 dependencies = [
   "Jinja2>=3.1",
   "PyYAML>=6.0",

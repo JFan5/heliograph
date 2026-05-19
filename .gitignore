@@ -37,3 +37,7 @@ secrets/
 # Debug output
 *.preview.html
 preview.html
+
+# Runtime logs
+logs/*
+!logs/.gitkeep

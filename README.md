@@ -102,15 +102,31 @@ notice in that component's slot — the rest of the email still ships.
 
 ## Scheduling
 
-Heliograph itself does not run a daemon. Wire it up with whatever scheduler your
-machine already has:
+Heliograph itself does not run a daemon. Wire it up with whatever scheduler
+your machine already has. `scripts/run.sh` is the cron-friendly entrypoint —
+it sources `.env`, runs the dispatcher, and prints a timestamp banner.
+
+### Cron (with timezone gating)
+
+Ubuntu's `cron` doesn't honor per-user `CRON_TZ`, so `run.sh` self-gates: by
+default it only sends when the current **US/Eastern** hour is `07`. Tell cron
+to fire it at the two UTC times that span both EDT and EST:
 
 ```cron
-# crontab -e — send every day at 07:30
-30 7 * * *  cd /path/to/heliograph && /path/to/.venv/bin/heliograph
+# crontab -e — daily 7 AM US/Eastern, DST-safe
+0 11,12 * * * /home/ubuntu/heliograph/scripts/run.sh >> /home/ubuntu/heliograph/logs/heliograph.log 2>&1
 ```
 
-Or use systemd timers, GitHub Actions on a schedule, etc.
+For other timezones, edit the `ET_HOUR != "07"` check at the top of
+`scripts/run.sh`, or set `HELIOGRAPH_SKIP_TIME_CHECK=1` and pick a different
+UTC hour in cron directly.
+
+### Manual / test runs
+
+```bash
+./scripts/run.sh --force --dry-run    # render to stdout, don't send
+./scripts/run.sh --force              # actually send right now
+```
 
 ## License
 
