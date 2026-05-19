@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "heliograph"
+version = "0.1.0"
+description = "A modular daily-email dispatcher — your own signal at sunrise."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "Jinja2>=3.1",
+  "PyYAML>=6.0",
+  "python-dotenv>=1.0",
+]
+
+[project.scripts]
+heliograph = "heliograph.main:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+heliograph = ["templates/*.html"]

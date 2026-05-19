@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{{ title }}</title>
+</head>
+<body style="margin:0;padding:0;background:#f3f4f6;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#111827;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f4f6;padding:24px 0;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.05);">
+          <tr>
+            <td style="background:linear-gradient(135deg,#f59e0b,#ef4444);padding:24px 28px;color:#fff;">
+              <div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;opacity:0.85;">Heliograph</div>
+              <div style="font-size:22px;font-weight:600;margin-top:4px;">{{ title }}</div>
+              <div style="font-size:13px;opacity:0.85;margin-top:2px;">{{ today.strftime("%A, %B %d, %Y") }}</div>
+            </td>
+          </tr>
+          {% for section in sections %}
+          <tr>
+            <td style="padding:20px 28px;border-top:1px solid #f3f4f6;">
+              <div style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#9ca3af;margin-bottom:8px;">{{ section.title }}</div>
+              <div style="font-size:14px;line-height:1.6;color:#1f2937;">{{ section.html | safe }}</div>
+            </td>
+          </tr>
+          {% endfor %}
+          <tr>
+            <td style="padding:16px 28px;background:#f9fafb;color:#9ca3af;font-size:11px;text-align:center;">
+              Sent by Heliograph · a daily signal from your own machine
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

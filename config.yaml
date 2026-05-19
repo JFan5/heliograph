@@ -1,0 +1,21 @@
+# Heliograph configuration
+# Each entry under `components` is plugged into the daily email in the order
+# they declare (lower `order` = closer to the top).
+
+email:
+  subject: "Heliograph · {date}"
+  to:
+    - fjl2401@gmail.com
+
+components:
+  - name: daily_quote
+    module: heliograph.components.daily_quote
+    class: DailyQuoteComponent
+    enabled: true
+    config: {}
+
+  - name: system_status
+    module: heliograph.components.system_status
+    class: SystemStatusComponent
+    enabled: true
+    config: {}
