@@ -17,11 +17,27 @@ components:
     enabled: true
     config: {}
 
+  - name: markets_summary
+    module: heliograph.components.markets_summary
+    class: MarketsSummaryComponent
+    enabled: true
+    config: {}
+      # tickers:
+      #   - { label: "Nasdaq", symbol: "^IXIC", decimals: 2 }
+      #   - { label: "ETH",    symbol: "ETH-USD", decimals: 0 }
+
   - name: market_fear
     module: heliograph.components.market_fear
     class: MarketFearComponent
     enabled: true
     config: {}
+
+  - name: hn_top
+    module: heliograph.components.hn_top
+    class: HNTopComponent
+    enabled: true
+    config:
+      limit: 5
 
   - name: github_trending
     module: heliograph.components.github_trending
